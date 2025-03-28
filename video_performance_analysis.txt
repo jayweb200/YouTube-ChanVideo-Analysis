@@ -1,0 +1,33 @@
+VIDEO PERFORMANCE ANALYSIS
+==================================================
+
+TOP PERFORMING VIDEOS BY VIEWS:
+1. "How To Make Money with APIs & AI (Full Guide)" - 256772 views
+2. "Go From Zero to $114,350 Using AI (Act Fast)" - 213557 views
+3. "How To Build & Sell Simple AI Agents - Step by Step" - 177472 views
+4. "This Free AI System Will Create Unique Content in Seconds!" - 170707 views
+5. "6 Ways To Earn Money With Prompt Engineering" - 116805 views
+
+TOP PERFORMING VIDEOS BY ENGAGEMENT RATE:
+1. "Make Money From YouTube WITHOUT Uploading a Single Video!" - 6.11% engagement
+2. "Create Viral Content With this Automated System" - 5.54% engagement
+3. "No One Will Share This AI Marketing Tool For Free!" - 5.35% engagement
+4. "No One Will Share This AI SEO Tool For Free - But I Will 😱" - 5.1% engagement
+5. "How To Build & Sell APIs Without Coding (Full Guide)" - 4.97% engagement
+
+TOP PERFORMING VIDEOS BY VIEWER RETENTION:
+1. "One ChatGPT Prompt To Generate Anything!" - 44.93% retention
+2. "I Built a Team of AIs to 10x My Business!" - 41.52% retention
+3. "The Incredible Chatgpt Earthquake Edition! Get it Now!" - 41.3% retention
+4. "Build SaaS with WordPress With 3 Plugins Only!" - 41.27% retention
+5. "API Bomber Method: Generate 3 Income Streams with One API" - 40.22% retention
+
+
+CONTENT PATTERNS:
+Average views per video: 59441
+Average engagement rate: 3.80%
+Average retention rate: 27.71%
+
+Average title length: 51.2 characters, 9.7 words
+
+NOTE: This is a basic analysis. For deeper insights, provide this data to an LLM along with specific questions about content strategy.

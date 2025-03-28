@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Media Kit - Hasan Aboul Hasan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header id="channel-header">
+            <div class="loading-spinner" id="header-loader">
+                <div class="spinner"></div>
+                <p>Loading channel data...</p>
+            </div>
+            <div class="header-content" style="display: none;">
+                <div class="profile-container">
+                    <img id="channel-thumbnail" src="" alt="Channel Thumbnail" class="profile-image">
+                    <div class="profile-info">
+                        <h1 id="channel-title"></h1>
+                        <p id="channel-custom-url"></p>
+                        <div class="key-metrics">
+                            <div class="metric">
+                                <i class="fas fa-users"></i>
+                                <span id="subscriber-count"></span>
+                                <span class="metric-label">Subscribers</span>
+                            </div>
+                            <div class="metric">
+                                <i class="fas fa-eye"></i>
+                                <span id="view-count"></span>
+                                <span class="metric-label">Views</span>
+                            </div>
+                            <div class="metric">
+                                <i class="fas fa-video"></i>
+                                <span id="video-count"></span>
+                                <span class="metric-label">Videos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section id="audience-demographics" class="section">
+            <h2 class="section-title">Audience Demographics</h2>
+            <div class="loading-spinner" id="demographics-loader">
+                <div class="spinner"></div>
+                <p>Loading demographics data...</p>
+            </div>
+            <div class="demographics-content" style="display: none;">
+                <div class="demographics-row">
+                    <div class="demographics-card">
+                        <h3>Age & Gender Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="ageGenderChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="demographics-card">
+                        <h3>Top Countries</h3>
+                        <div class="chart-container">
+                            <canvas id="countriesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="demographics-row">
+                    <div class="demographics-card">
+                        <h3>Device Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="devicesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="performance-metrics" class="section">
+            <h2 class="section-title">Performance Metrics</h2>
+            <div class="loading-spinner" id="performance-loader">
+                <div class="spinner"></div>
+                <p>Loading performance data...</p>
+            </div>
+            <div class="performance-content" style="display: none;">
+                <div class="metrics-row">
+                    <div class="metrics-card">
+                        <h3>Channel Averages</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-item">
+                                <i class="fas fa-percentage"></i>
+                                <span id="avg-view-percentage" class="metric-value"></span>
+                                <span class="metric-label">Avg View %</span>
+                            </div>
+                            <div class="metric-item">
+                                <i class="fas fa-calendar-day"></i>
+                                <span id="avg-daily-views" class="metric-value"></span>
+                                <span class="metric-label">Daily Views</span>
+                            </div>
+                            <div class="metric-item">
+                                <i class="fas fa-video"></i>
+                                <span id="avg-views-per-video" class="metric-value"></span>
+                                <span class="metric-label">Views Per Video</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

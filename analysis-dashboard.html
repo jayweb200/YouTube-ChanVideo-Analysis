@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Analysis Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="analysis-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header id="dashboard-header">
+            <div class="loading-spinner" id="header-loader">
+                <div class="spinner"></div>
+                <p>Loading channel data...</p>
+            </div>
+            <div class="header-content" style="display: none;">
+                <div class="profile-container">
+                    <div class="dashboard-title">
+                        <h1>YouTube Video Analysis Dashboard</h1>
+                        <p id="channel-name"></p>
+                    </div>
+                    <div class="key-metrics">
+                        <div class="metric">
+                            <i class="fas fa-users"></i>
+                            <span id="subscriber-count"></span>
+                            <span class="metric-label">Subscribers</span>
+                        </div>
+                        <div class="metric">
+                            <i class="fas fa-eye"></i>
+                            <span id="total-views"></span>
+                            <span class="metric-label">Total Views</span>
+                        </div>
+                        <div class="metric">
+                            <i class="fas fa-chart-line"></i>
+                            <span id="avg-engagement"></span>
+                            <span class="metric-label">Avg. Engagement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section id="top-videos" class="section">
+            <h2 class="section-title">Top 10 Videos by Views</h2>
+            <div class="loading-spinner" id="videos-loader">
+                <div class="spinner"></div>
+                <p>Loading video data...</p>
+            </div>
+            <div class="videos-content" style="display: none;">
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <input type="text" id="video-search" placeholder="Search videos...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="sort-options">
+                        <label for="sort-by">Sort by:</label>
+                        <select id="sort-by">
+                            <option value="views-desc">Views (High to Low)</option>
+                            <option value="views-asc">Views (Low to High)</option>
+                            <option value="engagement-desc">Engagement (High to Low)</option>
+                            <option value="engagement-asc">Engagement (Low to High)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="videos-table-container">
+                    <table class="videos-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Thumbnail</th>
+                                <th>Title</th>
+                                <th>Views</th>
+                                <th>Engagement</th>
+                                <th>Retention</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="videos-table-body">
+                            <!-- Videos will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="video-analysis" class="section">
+            <h2 class="section-title">Video Analysis</h2>
+            <div class="loading-spinner" id="analysis-loader">
+                <div class="spinner"></div>
+                <p>Loading analysis data...</p>
+            </div>
+            <div class="analysis-content" style="display: none;">
+                <div class="analysis-tabs">
+                    <div class="tab-buttons" id="video-tabs">
+                        <!-- Video tabs will be inserted here -->
+                    </div>
+                    <div class="tab-content" id="video-tab-content">
+                        <!-- Video analysis content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="patterns-recommendations" class="section">
+            <h2 class="section-title">Patterns & Recommendations</h2>
+            <div class="loading-spinner" id="patterns-loader">
+                <div class="spinner"></div>
+                <p>Loading patterns data...</p>
+            </div>
+            <div class="patterns-content" style="display: none;">
+                <div class="patterns-grid">
+                    <div class="patterns-card">
+                        <h3>Common Patterns</h3>
+                        <div id="patterns-common" class="patterns-section">
+                            <!-- Common patterns will be inserted here -->
+                        </div>
+                    </div>
+                    <div class="patterns-card">
+                        <h3>Success Factors</h3>
+                        <div id="patterns-success" class="patterns-section">
+                            <!-- Success factors will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="recommendations-card">
+                    <h3>Actionable Recommendations</h3>
+                    <div id="recommendations" class="recommendations-section">
+                        <!-- Recommendations will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-content">
+                <p>YouTube Video Analysis Dashboard</p>
+                <p>Data generated using OpenAI's GPT-4o and Vision models</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="analysis-dashboard.js"></script>
+</body>
+</html>

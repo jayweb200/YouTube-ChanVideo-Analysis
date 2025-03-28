@@ -1,0 +1,487 @@
+{
+  "generatedAt": "2025-03-07 07:22:24",
+  "channelInfo": {
+    "id": "UCl4nXWTkPOqmKlEmIN5_TJQ",
+    "title": "Hasan Aboul Hasan",
+    "description": "I help you with Smart business and Marketing Strategies powered by AI, Python, and Automation.\n\nWho is Hasan?\nDigital Entrepreneur with 9+ years' experience, Founder @ LearnWithHasan. Helping Digital Marketers achieve 10X results using AI and Automation.\n\nMy Other Tech Channel: https://www.youtube.com/@hasanaboulhasan-tech/\n",
+    "customUrl": "@hasanaboulhasan",
+    "publishedAt": "2016-09-23T07:04:56Z",
+    "thumbnails": {
+      "default": {
+        "url": "https://yt3.ggpht.com/9tYfua7D3BVrzd-IjcUbbhlHNXNfvdZO79SgBCDvjDxZXy0YYm-FCWJO1HwxoB3BKPIvqL_88g=s88-c-k-c0x00ffffff-no-rj",
+        "width": 88,
+        "height": 88
+      },
+      "medium": {
+        "url": "https://yt3.ggpht.com/9tYfua7D3BVrzd-IjcUbbhlHNXNfvdZO79SgBCDvjDxZXy0YYm-FCWJO1HwxoB3BKPIvqL_88g=s240-c-k-c0x00ffffff-no-rj",
+        "width": 240,
+        "height": 240
+      },
+      "high": {
+        "url": "https://yt3.ggpht.com/9tYfua7D3BVrzd-IjcUbbhlHNXNfvdZO79SgBCDvjDxZXy0YYm-FCWJO1HwxoB3BKPIvqL_88g=s800-c-k-c0x00ffffff-no-rj",
+        "width": 800,
+        "height": 800
+      }
+    },
+    "country": "LB",
+    "viewCount": 10645495,
+    "subscriberCount": 971000,
+    "hiddenSubscriberCount": false,
+    "videoCount": 84,
+    "keywords": "\"prompt engineering\" \"online marketing\" \"marketing automation\" \"python scripts\" \"online tools\" ai"
+  },
+  "audience": {
+    "ageGender": {
+      "female": {
+        "age13-17": 0,
+        "age18-24": 2.1,
+        "age25-34": 3.5,
+        "age35-44": 2.8,
+        "age45-54": 1.6,
+        "age55-64": 0.5,
+        "age65-": 0.1
+      },
+      "male": {
+        "age13-17": 0.4,
+        "age18-24": 17,
+        "age25-34": 29.4,
+        "age35-44": 22.8,
+        "age45-54": 12.6,
+        "age55-64": 5.2,
+        "age65-": 1.9
+      },
+      "genderUserSpecified": {
+        "age25-34": 0,
+        "age45-54": 0,
+        "age55-64": 0
+      }
+    },
+    "countries": {
+      "IN": 35.301574987523566,
+      "US": 16.024238582582186,
+      "PK": 9.695196512747252,
+      "BD": 4.609304228743345,
+      "NG": 4.021788234069778,
+      "GB": 3.97188248734026,
+      "CA": 3.181195703848419,
+      "MA": 2.785734052039158,
+      "ZA": 1.821204975437385,
+      "DE": 1.713824837924583,
+      "ID": 1.501666284292462,
+      "AU": 1.4888941974517322,
+      "AE": 1.4784873118778041,
+      "PH": 1.370397613984962,
+      "EG": 1.359990728411034,
+      "KE": 1.1892231969479443,
+      "FR": 1.1260723231243364,
+      "MY": 1.1251262426176154,
+      "LK": 1.1076237532432822,
+      "SA": 1.0186921856115347,
+      "NL": 0.8625889020026158,
+      "DZ": 0.8453229327549627,
+      "VN": 0.8273474031272691,
+      "BR": 0.8065336319794133,
+      "TR": 0.7660886903171026
+    },
+    "devices": {
+      "MOBILE": {
+        "views": 241966,
+        "percentage": 45.3598081872836
+      },
+      "DESKTOP": {
+        "views": 237568,
+        "percentage": 44.53534344261834
+      },
+      "TV": {
+        "views": 42202,
+        "percentage": 7.911337233825175
+      },
+      "TABLET": {
+        "views": 11701,
+        "percentage": 2.1935111362728867
+      }
+    }
+  },
+  "performance": {
+    "last30Days": {
+      "views": 287975,
+      "watchTimeMinutes": 1073796,
+      "avgViewDuration": 223,
+      "subscribersGained": 9102,
+      "likes": 8251,
+      "comments": 362,
+      "shares": 7599
+    },
+    "averages": {
+      "averageViewPercentage": 19.2,
+      "dailyViews": 9599,
+      "viewsPerVideo": 36155.5,
+      "engagementRate": 2.99
+    }
+  },
+  "topContent": {
+    "topVideos": [
+      {
+        "id": "ZaJURMrXtmc",
+        "title": "How To Build & Sell APIs Without Coding (Full Guide)",
+        "publishedAt": "2025-02-28T15:23:33Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/ZaJURMrXtmc/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/ZaJURMrXtmc/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/ZaJURMrXtmc/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/ZaJURMrXtmc/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/ZaJURMrXtmc/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 19036,
+        "likeCount": 874,
+        "commentCount": 69,
+        "duration": "PT22M57S"
+      },
+      {
+        "id": "4y9ss33QWTY",
+        "title": "How To Build & Sell Simple AI Agents - Step by Step",
+        "publishedAt": "2025-02-20T16:00:04Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/4y9ss33QWTY/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/4y9ss33QWTY/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/4y9ss33QWTY/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/4y9ss33QWTY/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/4y9ss33QWTY/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 179211,
+        "likeCount": 6389,
+        "commentCount": 270,
+        "duration": "PT21M4S"
+      },
+      {
+        "id": "zp0GqmvlwnQ",
+        "title": "3 Skills To Survive in the AI ERA!",
+        "publishedAt": "2025-02-12T13:48:54Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/zp0GqmvlwnQ/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/zp0GqmvlwnQ/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/zp0GqmvlwnQ/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/zp0GqmvlwnQ/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/zp0GqmvlwnQ/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 11678,
+        "likeCount": 516,
+        "commentCount": 62,
+        "duration": "PT10M17S"
+      },
+      {
+        "id": "Ik89FPGSC8A",
+        "title": "Not Getting Traffic to your website? Try This in 2025!",
+        "publishedAt": "2025-01-31T12:50:37Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/Ik89FPGSC8A/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/Ik89FPGSC8A/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/Ik89FPGSC8A/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/Ik89FPGSC8A/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/Ik89FPGSC8A/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 13401,
+        "likeCount": 520,
+        "commentCount": 49,
+        "duration": "PT10M45S"
+      },
+      {
+        "id": "cxGRFvW5Jr4",
+        "title": "This Free Automated System Will EXPLODE Your Website Traffic!",
+        "publishedAt": "2025-01-08T13:08:03Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/cxGRFvW5Jr4/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/cxGRFvW5Jr4/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/cxGRFvW5Jr4/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/cxGRFvW5Jr4/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/cxGRFvW5Jr4/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 14059,
+        "likeCount": 546,
+        "commentCount": 35,
+        "duration": "PT15M13S"
+      },
+      {
+        "id": "dQ9r-v1Y0zI",
+        "title": "5 New Online Business Ideas for 2025 You Can Start for Free",
+        "publishedAt": "2024-12-27T14:21:57Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/dQ9r-v1Y0zI/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/dQ9r-v1Y0zI/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/dQ9r-v1Y0zI/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/dQ9r-v1Y0zI/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/dQ9r-v1Y0zI/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 34412,
+        "likeCount": 1246,
+        "commentCount": 69,
+        "duration": "PT13M27S"
+      },
+      {
+        "id": "Ut08wTDsDkw",
+        "title": "How to Make your First $1000 Online with Zero Budget - Step by Step!",
+        "publishedAt": "2024-11-30T13:18:46Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/Ut08wTDsDkw/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/Ut08wTDsDkw/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/Ut08wTDsDkw/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/Ut08wTDsDkw/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/Ut08wTDsDkw/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 33103,
+        "likeCount": 1259,
+        "commentCount": 89,
+        "duration": "PT13M18S"
+      },
+      {
+        "id": "jKXbm1zN4wk",
+        "title": "Build & Sell AI Chatbots Without Coding | Beginner's Guide 2025",
+        "publishedAt": "2024-11-25T12:54:55Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/jKXbm1zN4wk/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/jKXbm1zN4wk/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/jKXbm1zN4wk/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/jKXbm1zN4wk/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/jKXbm1zN4wk/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 16495,
+        "likeCount": 603,
+        "commentCount": 46,
+        "duration": "PT24M31S"
+      },
+      {
+        "id": "3Zak4x9mZag",
+        "title": "How To Create Killer Viral Content With AI - NOT ChatGPT!",
+        "publishedAt": "2024-11-17T11:26:35Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/3Zak4x9mZag/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/3Zak4x9mZag/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/3Zak4x9mZag/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/3Zak4x9mZag/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/3Zak4x9mZag/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 22446,
+        "likeCount": 814,
+        "commentCount": 79,
+        "duration": "PT14M50S"
+      },
+      {
+        "id": "4M58OEHGsmU",
+        "title": "Affiliate Marketing With AI (Not For Beginners)",
+        "publishedAt": "2024-10-29T12:43:30Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/4M58OEHGsmU/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/4M58OEHGsmU/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/4M58OEHGsmU/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/4M58OEHGsmU/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/4M58OEHGsmU/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "viewCount": 17714,
+        "likeCount": 650,
+        "commentCount": 56,
+        "duration": "PT9M24S"
+      }
+    ],
+    "averageViews": 36155.5
+  }
+}
