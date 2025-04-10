@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-API_KEY = "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"
+API_KEY = "sk-XXX"
 
 # Initialize OpenAI client
 client = OpenAI(api_key=API_KEY)
