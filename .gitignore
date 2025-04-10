@@ -1,0 +1,32 @@
+# Credentials and tokens
+credentials.json
+token.json
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Data files (optional, uncomment if you don't want to share your data)
+# *.csv
+# *.json
+
+# Cache directories
+title_analysis_cache/
+thumbnail_analysis_cache/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
