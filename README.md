@@ -9,6 +9,7 @@ This repository contains a collection of Python scripts for analyzing YouTube ch
 - Generate media kits for potential sponsors
 - Analyze video titles and thumbnails using AI
 - Identify patterns in successful content
+- Generate new content ideas using AI and strategic marketing principles (Purple Cow)
 
 ## Prerequisites
 
@@ -120,6 +121,18 @@ This will:
 - Use AI models (like Google Gemini) to analyze titles and thumbnails
 - Generate insights about what makes your content successful
 - Save the analysis to `youtube_analysis_results.json` and `youtube_analysis_report.md`
+
+### Generate a Content Plan with AI (Purple Cow Strategy)
+
+```bash
+python content_planner.py
+```
+
+This script uses the "Purple Cow" marketing strategy (inspired by Seth Godin) along with AI analysis of your top-performing videos (based on retention and shares) to suggest novel content ideas.
+
+- **Input**: Relies on the data collected by `get_data.py` (specifically `youtube_video_data.json`). Ensure you have run `get_data.py` first.
+- **Output**: The script will generate a content plan in `content_plan.md`, providing several video ideas with titles and descriptions.
+- **Dependencies**: This feature uses `scikit-learn` for data normalization (included in `requirements.txt`).
 
 ## Security Notes
 
