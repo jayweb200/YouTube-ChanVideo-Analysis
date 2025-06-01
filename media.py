@@ -10,6 +10,7 @@ and advertisers typically look for.
 import os
 import json
 import pandas as pd
+import argparse
 from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
@@ -57,20 +58,19 @@ def get_authenticated_service():
         raise
 
 
-def get_channel_info(youtube):
+def get_channel_info(youtube, target_channel_id):
     """
-    Retrieves comprehensive channel information.
+    Retrieves comprehensive channel information for the specified channel ID.
     """
     try:
-        # Get the authenticated user's channel ID
         channels_request = youtube.channels().list(
             part="id,snippet,statistics,brandingSettings,contentDetails,topicDetails",
-            mine=True
+            id=target_channel_id
         )
         channel_response = channels_request.execute()
         
         if 'items' not in channel_response or len(channel_response['items']) == 0:
-            raise Exception("No channel found for the authenticated user")
+            raise Exception(f"No channel found with ID: {target_channel_id}")
         
         channel = channel_response['items'][0]
         
@@ -92,11 +92,11 @@ def get_channel_info(youtube):
         
         return channel_info
     except Exception as e:
-        print(f"Error retrieving channel info: {str(e)}")
+        print(f"Error retrieving channel info for {target_channel_id}: {str(e)}")
         raise
 
 
-def get_channel_demographics(youtube_analytics):
+def get_channel_demographics(youtube_analytics, target_channel_id): # Add target_channel_id here
     """
     Retrieves demographic information about the channel's audience.
     """
@@ -113,7 +113,7 @@ def get_channel_demographics(youtube_analytics):
         try:
             # Get viewer demographics by age and gender
             demographics_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date,
                 endDate=end_date,
                 metrics="viewerPercentage",
@@ -129,7 +129,7 @@ def get_channel_demographics(youtube_analytics):
             # Get viewer demographics by geography (countries)
             # Using views instead of viewerPercentage for better compatibility
             geography_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date,
                 endDate=end_date,
                 metrics="views",
@@ -145,7 +145,7 @@ def get_channel_demographics(youtube_analytics):
         try:
             # Get viewer demographics by device type
             device_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date,
                 endDate=end_date,
                 metrics="views",
@@ -211,9 +211,9 @@ def get_channel_demographics(youtube_analytics):
         }
 
 
-def get_performance_metrics(youtube_analytics):
+def get_performance_metrics(youtube_analytics, target_channel_id):
     """
-    Retrieves overall channel performance metrics.
+    Retrieves overall channel performance metrics for the specified channel ID.
     """
     try:
         # Get current date and format properly
@@ -244,7 +244,7 @@ def get_performance_metrics(youtube_analytics):
         try:
             # Get 30-day metrics
             metrics_30d_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date_30d,
                 endDate=end_date,
                 metrics="views,estimatedMinutesWatched,averageViewDuration,subscribersGained,likes,comments,shares"
@@ -257,7 +257,7 @@ def get_performance_metrics(youtube_analytics):
         try:
             # Get 90-day metrics
             metrics_90d_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date_90d,
                 endDate=end_date,
                 metrics="views,estimatedMinutesWatched,averageViewDuration,subscribersGained,likes,comments,shares"
@@ -270,7 +270,7 @@ def get_performance_metrics(youtube_analytics):
         try:
             # Get year-to-date metrics
             metrics_ytd_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date_ytd,
                 endDate=end_date,
                 metrics="views,estimatedMinutesWatched,averageViewDuration,subscribersGained,likes,comments,shares"
@@ -283,7 +283,7 @@ def get_performance_metrics(youtube_analytics):
         try:
             # Get monthly data for growth chart - ensuring dates align with month boundaries
             monthly_data_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date_monthly,
                 endDate=end_date,
                 metrics="views,subscribersGained",
@@ -298,7 +298,7 @@ def get_performance_metrics(youtube_analytics):
         try:
             # Get average watch percentage
             watch_percentage_request = youtube_analytics.reports().query(
-                ids="channel==MINE",
+                ids=f"channel=={target_channel_id}",
                 startDate=start_date_90d,
                 endDate=end_date,
                 metrics="averageViewPercentage"
@@ -442,18 +442,18 @@ def get_top_videos(youtube, channel_info):
         }
 
 
-def create_media_kit():
+def create_media_kit(target_channel_id, output_json_filename, output_summary_filename):
     """
-    Creates a comprehensive media kit with all channel statistics.
+    Creates a comprehensive media kit for the specified channel ID.
+    Saves the kit to the provided filenames.
     """
     try:
-        print("Authenticating with YouTube API...")
+        print(f"Authenticating with YouTube API for channel: {target_channel_id}...")
         youtube, youtube_analytics = get_authenticated_service()
         
-        # Create a media kit object with default empty values 
-        # in case any section fails to load
         media_kit = {
             'generatedAt': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            '_channel_id_arg': target_channel_id, # For error case partial save
             'channelInfo': {},
             'audience': {
                 'ageGender': {},
@@ -470,27 +470,26 @@ def create_media_kit():
             }
         }
         
-        # Try to get each section independently so if one fails, the others still work
         try:
-            print("Retrieving channel information...")
-            channel_info = get_channel_info(youtube)
+            print(f"Retrieving channel information for {target_channel_id}...")
+            channel_info = get_channel_info(youtube, target_channel_id)
             media_kit['channelInfo'] = channel_info
         except Exception as e:
-            print(f"Error retrieving channel info: {str(e)}")
+            print(f"Error retrieving channel info for {target_channel_id}: {str(e)}")
         
         try:
-            print("Retrieving audience demographics...")
-            demographics = get_channel_demographics(youtube_analytics)
+            print(f"Retrieving audience demographics for {target_channel_id}...")
+            demographics = get_channel_demographics(youtube_analytics, target_channel_id)
             media_kit['audience'] = demographics
         except Exception as e:
-            print(f"Error retrieving demographics: {str(e)}")
+            print(f"Error retrieving demographics for {target_channel_id}: {str(e)}")
         
         try:
-            print("Retrieving performance metrics...")
-            performance = get_performance_metrics(youtube_analytics)
+            print(f"Retrieving performance metrics for {target_channel_id}...")
+            performance = get_performance_metrics(youtube_analytics, target_channel_id)
             media_kit['performance'] = performance
         except Exception as e:
-            print(f"Error retrieving performance metrics: {str(e)}")
+            print(f"Error retrieving performance metrics for {target_channel_id}: {str(e)}")
         
         try:
             print("Retrieving top videos...")
@@ -507,18 +506,18 @@ def create_media_kit():
             print(f"Error retrieving top videos: {str(e)}")
         
         # Save to JSON file
-        output_file = 'youtube_media_kit.json'
-        with open(output_file, 'w', encoding='utf-8') as f:
+        # Save to JSON file
+        with open(output_json_filename, 'w', encoding='utf-8') as f:
             json.dump(media_kit, f, ensure_ascii=False, indent=2)
         
-        print(f"Media kit successfully generated and saved to {output_file}")
+        print(f"Media kit successfully generated and saved to {output_json_filename}")
         
         # Also create a summary text file with key metrics
-        create_summary_text(media_kit)
+        create_summary_text(media_kit, output_summary_filename)
         
         return media_kit
     except Exception as e:
-        print(f"Error creating media kit: {str(e)}")
+        print(f"Error creating media kit for {target_channel_id}: {str(e)}")
         
         # Even if there was an error, try to save whatever data we have
         try:
@@ -533,17 +532,20 @@ def create_media_kit():
                 partial_media_kit.update(media_kit)
             
             # Save the partial media kit
-            with open('youtube_media_kit_partial.json', 'w', encoding='utf-8') as f:
+            # Use channel_id if available, otherwise a generic name
+            partial_filename = f'youtube_media_kit_partial_{target_channel_id}.json'
+
+            with open(partial_filename, 'w', encoding='utf-8') as f:
                 json.dump(partial_media_kit, f, ensure_ascii=False, indent=2)
             
-            print("Saved partial media kit data to youtube_media_kit_partial.json")
+            print(f"Saved partial media kit data to {partial_filename}")
             return partial_media_kit
         except:
             print("Could not save partial media kit data")
             return None
 
 
-def create_summary_text(media_kit):
+def create_summary_text(media_kit, output_summary_file):
     """
     Creates a human-readable summary of the media kit.
     """
@@ -644,23 +646,50 @@ def create_summary_text(media_kit):
             summary += f"   URL: https://www.youtube.com/watch?v={video['id']}\n"
         
         # Save summary to file
-        with open('youtube_media_kit_summary.txt', 'w', encoding='utf-8') as f:
+        with open(output_summary_file, 'w', encoding='utf-8') as f:
             f.write(summary)
         
-        print(f"Media kit summary saved to youtube_media_kit_summary.txt")
+        print(f"Media kit summary saved to {output_summary_file}")
     except Exception as e:
         print(f"Error creating summary text: {str(e)}")
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate a YouTube Media Kit.")
+    parser.add_argument("--channel_id", type=str, required=True, help="The YouTube Channel ID for which to generate the media kit.")
+    parser.add_argument("--data_file", type=str, required=True, help="Path to the input JSON data file (e.g., youtube_video_data_CHANNELID.json). Note: This script currently fetches most data live; this argument is for consistency but primarily uses channel_id for API calls.")
+    args = parser.parse_args()
+
     print("YouTube Media Kit Generator")
     print("===========================")
-    media_kit = create_media_kit()
+    print(f"Generating media kit for Channel ID: {args.channel_id}")
+    print(f"Using data file (primarily for reference, most data fetched live): {args.data_file}")
+
+    # Define output filenames based on channel_id
+    output_json_file = f"youtube_media_kit_{args.channel_id}.json"
+    output_summary_file = f"youtube_media_kit_summary_{args.channel_id}.txt"
+
+    # Pass these filenames and channel_id to create_media_kit, perhaps via a config dict or directly
+    # For simplicity, I'll modify create_media_kit to accept them or fetch from a passed config
+    # For now, I'll add them to a dictionary that create_media_kit can use,
+    # and pass channel_id directly where needed for API calls.
+
+    # The create_media_kit function will be modified to accept channel_id for API calls
+    # and use these filenames.
+
+    media_kit_data = create_media_kit(
+        target_channel_id=args.channel_id,
+        output_json_filename=output_json_file,
+        output_summary_filename=output_summary_file
+    ) # This function signature will need to be updated
     
-    print("\nMedia Kit Creation Complete!")
-    print("\nFiles created:")
-    print("1. youtube_media_kit.json - Complete media kit data in JSON format")
-    print("2. youtube_media_kit_summary.txt - Human-readable summary of key metrics")
+    if media_kit_data:
+        print("\nMedia Kit Creation Complete!")
+        print("\nFiles created:")
+        print(f"1. {output_json_file} - Complete media kit data in JSON format")
+        print(f"2. {output_summary_file} - Human-readable summary of key metrics")
+    else:
+        print("\nMedia Kit Creation Failed or was incomplete.")
     
     print("\nNext steps:")
     print("1. Use the JSON file to build your custom media kit UI")
