@@ -3,7 +3,7 @@ import os
 import requests
 from io import BytesIO
 import pandas as pd
-from openai import OpenAI
+import google.generativeai as genai
 
 from PIL import Image
 from urllib.request import urlopen
@@ -11,10 +11,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-API_KEY = "sk-XXX"
+GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
 
-# Initialize OpenAI client
-client = OpenAI(api_key=API_KEY)
+# Configure Gemini client
+genai.configure(api_key=GEMINI_API_KEY)
+
+# Initialize Gemini models
+models = {
+    'text': genai.GenerativeModel('gemini-pro'),
+    'vision': genai.GenerativeModel('gemini-pro-vision')
+}
 
 def load_data(json_file_path):
     """Load YouTube data from JSON file"""
@@ -40,63 +46,37 @@ def get_top_videos(data, metric='views', count=10):
     return top_videos
 
 def analyze_title_with_llm(title):
-    """Analyze title using OpenAI's GPT model"""
+    """Analyze title using Gemini"""
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {
-                    "role": "system", 
-                    "content": "You are an expert in YouTube content strategy and SEO. Analyze this video title and identify key patterns and elements that make it effective. Focus on psychological triggers, keywords, structure, emotion, and clarity."
-                },
-                {
-                    "role": "user", 
-                    "content": f"Analyze this YouTube title and explain why it's effective: \"{title}\""
-                }
-            ],
-            temperature=0.7,
-            max_tokens=500
-        )
-        return response.choices[0].message.content
+        prompt = f"You are an expert in YouTube content strategy and SEO. Analyze this video title and identify key patterns and elements that make it effective. Focus on psychological triggers, keywords, structure, emotion, and clarity. Analyze this YouTube title and explain why it's effective: \"{title}\""
+        response = models['text'].generate_content(prompt)
+        return response.text
     except Exception as e:
         print(f"Error analyzing title with LLM: {e}")
         return "Error analyzing title"
 
 def analyze_thumbnail_with_vision(thumbnail_url):
-    """Analyze thumbnail using OpenAI's Vision model"""
+    """Analyze thumbnail using Gemini Vision model"""
     try:
         # Get image data
-        response = requests.get(thumbnail_url)
-        if response.status_code != 200:
+        image_response = requests.get(thumbnail_url)
+        if image_response.status_code != 200:
             return "Failed to retrieve thumbnail image"
         
-        # Convert image to base64 (alternative approach)
-        image_content = response.content
+        image_bytes = image_response.content
+        image_part = {
+            "mime_type": "image/jpeg",  # Assuming JPEG, adjust if necessary
+            "data": image_bytes
+        }
+
+        prompt_parts = [
+            "You are an expert in YouTube thumbnail analysis. Examine this thumbnail and identify key elements that make it effective. Focus on composition, colors, text usage, emotional triggers, and clickability factors.",
+            "Analyze this YouTube thumbnail and explain why it's effective:",
+            image_part
+        ]
         
-        # Send to OpenAI Vision
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are an expert in YouTube thumbnail analysis. Examine this thumbnail and identify key elements that make it effective. Focus on composition, colors, text usage, emotional triggers, and clickability factors."
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "Analyze this YouTube thumbnail and explain why it's effective:"},
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": thumbnail_url,
-                            },
-                        }
-                    ]
-                }
-            ],
-            max_tokens=500
-        )
-        return response.choices[0].message.content
+        response = models['vision'].generate_content(prompt_parts)
+        return response.text
     except Exception as e:
         print(f"Error analyzing thumbnail with Vision: {e}")
         return "Error analyzing thumbnail"
@@ -141,24 +121,11 @@ VIDEO URL: https://www.youtube.com/watch?v={row['video_id']}
     return combined_analysis
 
 def generate_patterns_report(all_analyses):
-    """Generate a report of common patterns across top videos using GPT"""
+    """Generate a report of common patterns across top videos using Gemini"""
     try:
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {
-                    "role": "system", 
-                    "content": "You are an expert in YouTube content strategy. Based on the analyses of multiple top-performing videos, identify common patterns, success factors, and actionable recommendations. Be specific and detailed in your analysis."
-                },
-                {
-                    "role": "user", 
-                    "content": f"Here are analyses of top-performing YouTube videos. Identify common patterns, success factors, and provide actionable recommendations:\n\n{all_analyses}"
-                }
-            ],
-            temperature=0.7,
-            max_tokens=2000
-        )
-        return response.choices[0].message.content
+        prompt = f"You are an expert in YouTube content strategy. Based on the analyses of multiple top-performing videos, identify common patterns, success factors, and actionable recommendations. Be specific and detailed in your analysis. Here are analyses of top-performing YouTube videos. Identify common patterns, success factors, and provide actionable recommendations:\n\n{all_analyses}"
+        response = models['text'].generate_content(prompt)
+        return response.text
     except Exception as e:
         print(f"Error generating patterns report: {e}")
         return "Error generating patterns report"

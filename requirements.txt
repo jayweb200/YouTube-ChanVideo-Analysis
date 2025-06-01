@@ -8,3 +8,4 @@ Pillow
 matplotlib
 seaborn
 fastapi
+google-generativeai

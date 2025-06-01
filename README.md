@@ -15,7 +15,8 @@ This repository contains a collection of Python scripts for analyzing YouTube ch
 - Python 3.6+
 - Google account with access to YouTube Analytics
 - Google Cloud Platform project with YouTube Data API v3 and YouTube Analytics API enabled
-- OpenAI API key (for AI-powered analysis features)
+- OpenAI API key (for AI-powered analysis features, if using older versions or specific scripts)
+- Gemini API key (for AI-powered analysis features using Google's Gemini models)
 
 ## Setup Instructions
 
@@ -74,6 +75,15 @@ Alternatively, you can copy the `credentials.json.example` file, rename it to `c
 API_KEY = "your_openai_api_key_here"
 ```
 
+#### Gemini API Authentication (for AI analysis features)
+
+1. Obtain your Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey) or the Google Cloud Console.
+2. In the analysis scripts (`analyze.py`, `analyze_new.py`, `analyze_new_json.py`), replace the placeholder `GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"` with your actual key:
+
+```python
+GEMINI_API_KEY = "your_gemini_api_key_here"
+```
+
 ## Usage
 
 ### Extract YouTube Channel Data
@@ -107,7 +117,7 @@ python analyze.py
 
 This will:
 - Analyze your top 10 videos by views
-- Use OpenAI's GPT models to analyze titles and thumbnails
+- Use AI models (like Google Gemini) to analyze titles and thumbnails
 - Generate insights about what makes your content successful
 - Save the analysis to `youtube_analysis_results.json` and `youtube_analysis_report.md`
 
