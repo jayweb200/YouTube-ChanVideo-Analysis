@@ -11,6 +11,7 @@ import os
 import pandas as pd
 import json
 import re
+import argparse
 from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
@@ -149,20 +150,20 @@ def get_authenticated_service():
         )
 
 
-def get_channel_id(youtube):
+def get_channel_details(youtube, channel_id_to_fetch):
     """
-    Retrieves the authenticated user's channel ID.
+    Retrieves details (ID, snippet, statistics) for the specified channel ID.
     """
     request = youtube.channels().list(
-        part="id",
-        mine=True
+        part="id,snippet,statistics", # Ensure all necessary parts are fetched
+        id=channel_id_to_fetch
     )
     response = request.execute()
     
     if 'items' in response and len(response['items']) > 0:
-        return response['items'][0]['id']
+        return response['items'][0] # Return the full channel item
     else:
-        raise Exception("Could not retrieve channel ID")
+        raise Exception(f"Could not retrieve details for channel ID: {channel_id_to_fetch}")
 
 
 def get_latest_videos(youtube, channel_id, max_results=50):
@@ -201,7 +202,7 @@ def get_latest_videos(youtube, channel_id, max_results=50):
     return []
 
 
-def get_video_analytics(youtube_analytics, video_id, published_at_str):
+def get_video_analytics(youtube_analytics, video_id, published_at_str, target_channel_id):
     """
     Retrieves analytics data for a specific video.
     Metrics: averageViewDuration, shares, subscribersGained, subscribersLost
@@ -219,7 +220,7 @@ def get_video_analytics(youtube_analytics, video_id, published_at_str):
             start_date = end_date
 
         report_request = youtube_analytics.reports().query(
-            ids="channel==MINE",
+            ids=f"channel=={target_channel_id}",
             startDate=start_date,
             endDate=end_date,
             metrics="averageViewDuration,shares,subscribersGained,subscribersLost",
@@ -285,30 +286,24 @@ def parse_duration(duration_str):
         return f"{minutes}:{seconds:02d}"
 
 
-def extract_video_data(youtube, youtube_analytics):
+def extract_video_data(youtube, youtube_analytics, target_channel_id):
     """
-    Main function to extract video data from the authenticated user's channel.
+    Main function to extract video data from the specified channel.
     Gathers comprehensive data suitable for LLM analysis of content patterns.
     """
     try:
-        # Get channel ID
-        channel_id = get_channel_id(youtube)
-        print(f"Found channel ID: {channel_id}")
+        # Get channel info for the target_channel_id
+        channel_info = get_channel_details(youtube, target_channel_id)
         
-        # Get channel info
-        channel_request = youtube.channels().list(
-            part="snippet,statistics",
-            id=channel_id
-        )
-        channel_response = channel_request.execute()
-        channel_info = channel_response['items'][0]
+        # Extract channel details
+        channel_id = channel_info['id'] # This should match target_channel_id
         channel_name = channel_info['snippet']['title']
         subscriber_count = channel_info['statistics']['subscriberCount']
         
-        print(f"Channel: {channel_name}")
+        print(f"Fetching data for channel: {channel_name} (ID: {channel_id})")
         print(f"Subscribers: {subscriber_count}")
         
-        # Get latest videos
+        # Get latest videos for this channel_id
         videos = get_latest_videos(youtube, channel_id)
         print(f"Retrieved {len(videos)} videos")
         
@@ -326,7 +321,7 @@ def extract_video_data(youtube, youtube_analytics):
             thumbnail_url = thumbnails.get('maxres', thumbnails.get('high', thumbnails.get('medium', thumbnails.get('default'))))['url']
             
             # Get analytics data
-            analytics = get_video_analytics(youtube_analytics, video_id, snippet['publishedAt'])
+            analytics = get_video_analytics(youtube_analytics, video_id, snippet['publishedAt'], target_channel_id)
             
             # Format video duration
             iso_duration = content_details.get('duration', 'PT0S')
@@ -399,11 +394,11 @@ def extract_video_data(youtube, youtube_analytics):
         df = df.sort_values(by='published_at', ascending=False)
         
         # Save to CSV
-        output_file_csv = 'youtube_video_data.csv'
+        output_file_csv = f'youtube_video_data_{target_channel_id}.csv'
         df.to_csv(output_file_csv, index=False)
         
         # Save full data to JSON
-        output_file_json = 'youtube_video_data.json'
+        output_file_json = f'youtube_video_data_{target_channel_id}.json'
         with open(output_file_json, 'w', encoding='utf-8') as f:
             json.dump({
                 'channel': {
@@ -421,7 +416,7 @@ def extract_video_data(youtube, youtube_analytics):
         performance_analysis = analyze_video_performance(video_data)
         
         # Save analysis to a separate file
-        output_analysis_file = 'video_performance_analysis.txt'
+        output_analysis_file = f'video_performance_analysis_{target_channel_id}.txt'
         with open(output_analysis_file, 'w', encoding='utf-8') as f:
             f.write(performance_analysis)
         
@@ -435,8 +430,12 @@ def extract_video_data(youtube, youtube_analytics):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Extract YouTube channel data for analysis.")
+    parser.add_argument("--channel_id", type=str, required=True, help="The YouTube Channel ID (starts with UC) to fetch data for.")
+    args = parser.parse_args()
+
     youtube, youtube_analytics = get_authenticated_service()
-    video_data_df, video_data_full = extract_video_data(youtube, youtube_analytics)
+    video_data_df, video_data_full = extract_video_data(youtube, youtube_analytics, args.channel_id)
     
     # Display summary
     print("\nSUMMARY:")
@@ -456,9 +455,9 @@ if __name__ == "__main__":
             print(f"Most engaging video: {video_data_df.loc[video_data_df['engagement_rate'].idxmax()]['title']}")
     
     print("\nFiles created:")
-    print("1. youtube_video_data.csv - Basic video data in CSV format")
-    print("2. youtube_video_data.json - Comprehensive video data including comments in JSON format")
-    print("3. video_performance_analysis.txt - Basic performance analysis")
+    print(f"1. CSV data file (e.g., youtube_video_data_{args.channel_id}.csv)")
+    print(f"2. JSON data file (e.g., youtube_video_data_{args.channel_id}.json)")
+    print(f"3. Text analysis file (e.g., video_performance_analysis_{args.channel_id}.txt)")
     
     print("\nNEXT STEPS:")
     print("1. Upload these files to an LLM conversation")

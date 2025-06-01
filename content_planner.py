@@ -3,6 +3,7 @@ import os
 import hashlib
 import pandas as pd
 import google.generativeai as genai
+import argparse
 from sklearn.preprocessing import MinMaxScaler # For normalization
 
 # --- Configuration ---
@@ -262,7 +263,11 @@ def save_plan_to_markdown(content_plan, top_analyzed_videos_summary, filepath="c
 # --- Main Execution ---
 def main():
     """Main function to orchestrate the content planning process."""
-    print("Starting content planner script...")
+    parser = argparse.ArgumentParser(description="Generate a YouTube content plan using AI and top video analysis.")
+    parser.add_argument("--data_file", type=str, required=True, help="Path to the input JSON data file (e.g., youtube_video_data_CHANNELID.json).")
+    args = parser.parse_args()
+
+    print(f"Starting content planner script with data file: {args.data_file}")
 
     # Configure Gemini
     try:
@@ -274,9 +279,9 @@ def main():
         return
 
     # 1. Load video data
-    video_data_container = load_video_data()
+    video_data_container = load_video_data(json_path=args.data_file)
     if not video_data_container or 'videos' not in video_data_container:
-        print("Failed to load video data or data is not in expected format. Exiting.")
+        print(f"Failed to load video data from {args.data_file} or data is not in expected format. Exiting.")
         return
 
     all_videos = video_data_container['videos']

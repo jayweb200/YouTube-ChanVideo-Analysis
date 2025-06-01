@@ -170,7 +170,7 @@ def generate_patterns_report(all_analyses):
         print(f"Error generating patterns report: {e}")
         return "Error generating patterns report"
 
-def save_intermediate_results(data, video_analyses, top_videos, step="video_analysis"):
+def save_intermediate_results(data, video_analyses, top_videos, channel_id, step="video_analysis"):
     """Save intermediate results to avoid repeating analysis if there's an error later"""
     intermediate_results = {
         'channel_name': data['channel']['name'],
@@ -181,19 +181,21 @@ def save_intermediate_results(data, video_analyses, top_videos, step="video_anal
     }
     
     # Save to JSON file
-    with open('youtube_analysis_intermediate.json', 'w') as f:
+    filename = f"youtube_analysis_intermediate_{channel_id}.json"
+    with open(filename, 'w') as f:
         json.dump(intermediate_results, f, indent=2)
     
-    print(f"Intermediate results saved after '{step}' step")
+    print(f"Intermediate results saved to {filename} after '{step}' step")
 
-def load_intermediate_results():
+def load_intermediate_results(channel_id):
     """Load intermediate results if they exist"""
+    filename = f"youtube_analysis_intermediate_{channel_id}.json"
     try:
-        with open('youtube_analysis_intermediate.json', 'r') as f:
+        with open(filename, 'r') as f:
             results = json.load(f)
         return results
     except Exception as e:
-        print(f"No intermediate results found: {e}")
+        print(f"No intermediate results found for {filename}: {e}")
         return None
 
 def parse_analysis_text(analysis_text):
@@ -362,7 +364,7 @@ def parse_patterns_report(patterns_text):
     
     return structured_data
 
-def create_final_report(data, video_analyses, patterns_report, top_videos=None):
+def create_final_report(data, video_analyses, patterns_report, channel_id, top_videos=None):
     """Create the final reports in both markdown and structured JSON formats"""
     # Save original results (for backward compatibility)
     original_results = {
@@ -372,8 +374,9 @@ def create_final_report(data, video_analyses, patterns_report, top_videos=None):
         'patterns_report': patterns_report
     }
     
-    # Save to original JSON file
-    with open('youtube_analysis_results.json', 'w') as f:
+    # Save to original JSON file (now channel-specific)
+    output_results_json_file = f"youtube_analysis_results_{channel_id}.json"
+    with open(output_results_json_file, 'w') as f:
         json.dump(original_results, f, indent=2)
     
     # Create structured data for UI
@@ -420,12 +423,14 @@ def create_final_report(data, video_analyses, patterns_report, top_videos=None):
             'structured_analysis': parse_analysis_text(analysis['analysis'])
         }
     
-    # Save structured data to new JSON file
-    with open('youtube_analysis_ui.json', 'w') as f:
+    # Save structured data to new JSON file (now channel-specific)
+    output_ui_json_file = f"youtube_analysis_ui_{channel_id}.json"
+    with open(output_ui_json_file, 'w') as f:
         json.dump(structured_results, f, indent=2)
     
-    # Save human-readable report to text file (for backward compatibility)
-    with open('youtube_analysis_report.md', 'w') as f:
+    # Save human-readable report to text file (now channel-specific)
+    output_report_md_file = f"youtube_analysis_report_{channel_id}.md"
+    with open(output_report_md_file, 'w') as f:
         f.write(f"# YouTube Content Analysis for {data['channel']['name']}\n\n")
         f.write(f"Channel Subscribers: {data['channel']['subscribers']}\n\n")
         f.write("## Top 10 Videos by Views\n\n")
@@ -454,13 +459,13 @@ def create_final_report(data, video_analyses, patterns_report, top_videos=None):
         f.write(patterns_report)
     
     print("Analysis complete!")
-    print("Results saved to 'youtube_analysis_results.json'")
-    print("Structured UI-friendly data saved to 'youtube_analysis_ui.json'")
-    print("Report saved to 'youtube_analysis_report.md'")
+    print(f"Results saved to '{output_results_json_file}'")
+    print(f"Structured UI-friendly data saved to '{output_ui_json_file}'")
+    print(f"Report saved to '{output_report_md_file}'")
 
-def main():
+def main(args): # Add args
     # Check for intermediate results first
-    intermediate = load_intermediate_results()
+    intermediate = load_intermediate_results(args.channel_id)
     
     if intermediate and intermediate.get('analysis_step') == "video_analysis":
         print("Found intermediate results from previous video analysis run")
@@ -481,11 +486,10 @@ def main():
         print("No intermediate results found or results are incomplete. Starting from scratch.")
         
         # Load the JSON data
-        data_path = "youtube_video_data.json"  # Update with your file path if needed
-        data = load_data(data_path)
+        data = load_data(args.data_file) # Use args.data_file
         
         if not data:
-            print("Failed to load data. Exiting.")
+            print(f"Failed to load data from {args.data_file}. Exiting.")
             return
         
         # Get top 10 videos by views
@@ -510,23 +514,22 @@ def main():
             all_analyses += analysis + "\n\n"
             
             # Save intermediate results after each video
-            save_intermediate_results(data, video_analyses, top_videos, "video_analysis")
+            save_intermediate_results(data, video_analyses, top_videos, args.channel_id, "video_analysis") # Pass channel_id
     
     # Generate overall patterns report
     print("Generating patterns report...")
     patterns_report = generate_patterns_report(all_analyses)
     
     # Create final report
-    create_final_report(data, video_analyses, patterns_report, top_videos)
+    create_final_report(data, video_analyses, patterns_report, args.channel_id, top_videos) # Pass channel_id
 
-def analyze_videos_only():
+def analyze_videos_only(args): # Add args
     """Run only the video analysis part without generating patterns"""
     # Load the JSON data
-    data_path = "youtube_video_data.json"
-    data = load_data(data_path)
+    data = load_data(args.data_file) # Use args.data_file
     
     if not data:
-        print("Failed to load data. Exiting.")
+        print(f"Failed to load data from {args.data_file}. Exiting.")
         return
     
     # Get top 10 videos by views
@@ -548,17 +551,17 @@ def analyze_videos_only():
         }
         
         # Save intermediate results after each video
-        save_intermediate_results(data, video_analyses, top_videos, "video_analysis")
+        save_intermediate_results(data, video_analyses, top_videos, args.channel_id, "video_analysis") # Pass channel_id
     
     print("Video analysis complete! Run the script with --patterns flag to generate the patterns report.")
 
-def analyze_patterns_only():
+def analyze_patterns_only(args): # Add args
     """Run only the patterns analysis using saved video analyses"""
     # Check for intermediate results
-    intermediate = load_intermediate_results()
+    intermediate = load_intermediate_results(args.channel_id) # Pass channel_id
     
     if not intermediate or intermediate.get('analysis_step') != "video_analysis":
-        print("No intermediate video analysis results found. Run the script with --videos flag first.")
+        print(f"No intermediate video analysis results found for channel {args.channel_id}. Run the script with --videos flag first.")
         return
     
     # Get data from intermediate results
@@ -576,20 +579,26 @@ def analyze_patterns_only():
     patterns_report = generate_patterns_report(all_analyses)
     
     # Create final report
-    create_final_report(data, video_analyses, patterns_report, top_videos)
+    create_final_report(data, video_analyses, patterns_report, args.channel_id, top_videos) # Pass channel_id
 
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description='Analyze YouTube video data')
-    parser.add_argument('--videos', action='store_true', help='Run only video analysis')
-    parser.add_argument('--patterns', action='store_true', help='Run only patterns analysis')
+    parser = argparse.ArgumentParser(description='Analyze YouTube video data with options for partial execution and JSON output focus.')
+    parser.add_argument('--videos', action='store_true', help='Run only video analysis.')
+    parser.add_argument('--patterns', action='store_true', help='Run only patterns analysis.')
+    parser.add_argument("--data_file", type=str, required=True, help="Path to the input YouTube video data JSON file (e.g., youtube_video_data_CHANNELID.json).")
+    parser.add_argument("--channel_id", type=str, required=True, help="Channel ID to be used for naming output files.")
     
     args = parser.parse_args()
-    
+
+    print(f"Starting JSON analysis for channel {args.channel_id} using data from: {args.data_file}")
     if args.videos:
-        analyze_videos_only()
+        print("Running in --videos only mode.")
+        analyze_videos_only(args)
     elif args.patterns:
-        analyze_patterns_only()
+        print("Running in --patterns only mode.")
+        analyze_patterns_only(args)
     else:
-        main()
+        print("Running full analysis (videos and patterns).")
+        main(args)

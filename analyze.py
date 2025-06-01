@@ -4,6 +4,7 @@ import requests
 from io import BytesIO
 import pandas as pd
 import google.generativeai as genai
+import argparse
 
 from PIL import Image
 from urllib.request import urlopen
@@ -131,12 +132,18 @@ def generate_patterns_report(all_analyses):
         return "Error generating patterns report"
 
 def main():
+    parser = argparse.ArgumentParser(description="Analyze YouTube video data using AI models.")
+    parser.add_argument("--data_file", type=str, required=True, help="Path to the input YouTube video data JSON file (e.g., youtube_video_data_CHANNELID.json).")
+    parser.add_argument("--channel_id", type=str, required=True, help="Channel ID to be used for naming output files.")
+    args = parser.parse_args()
+
+    print(f"Starting analysis for channel {args.channel_id} using data from: {args.data_file}")
+
     # Load the JSON data
-    data_path = "youtube_video_data.json"  # Update with your file path if needed
-    data = load_data(data_path)
+    data = load_data(args.data_file)
     
     if not data:
-        print("Failed to load data. Exiting.")
+        print(f"Failed to load data from {args.data_file}. Exiting.")
         return
     
     # Get top 10 videos by views
@@ -173,11 +180,13 @@ def main():
     }
     
     # Save to JSON file
-    with open('youtube_analysis_results.json', 'w') as f:
+    output_json_file = f"youtube_analysis_results_{args.channel_id}.json"
+    with open(output_json_file, 'w') as f:
         json.dump(results, f, indent=2)
     
     # Save human-readable report to text file
-    with open('youtube_analysis_report.md', 'w') as f:
+    output_report_file = f"youtube_analysis_report_{args.channel_id}.md"
+    with open(output_report_file, 'w') as f:
         f.write(f"# YouTube Content Analysis for {data['channel']['name']}\n\n")
         f.write(f"Channel Subscribers: {data['channel']['subscribers']}\n\n")
         f.write("## Top 10 Videos by Views\n\n")
@@ -195,8 +204,8 @@ def main():
         f.write(patterns_report)
     
     print("Analysis complete!")
-    print("Results saved to 'youtube_analysis_results.json'")
-    print("Report saved to 'youtube_analysis_report.md'")
+    print(f"Results saved to '{output_json_file}'")
+    print(f"Report saved to '{output_report_file}'")
 
 if __name__ == "__main__":
     main()
