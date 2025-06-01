@@ -201,43 +201,60 @@ def get_latest_videos(youtube, channel_id, max_results=50):
     return []
 
 
-def get_video_analytics(youtube_analytics, video_id):
+def get_video_analytics(youtube_analytics, video_id, published_at_str):
     """
-    Retrieves analytics data (average view duration) for a specific video.
-    
-    Note: YouTube Analytics API has limitations on how far back you can retrieve data.
+    Retrieves analytics data for a specific video.
+    Metrics: averageViewDuration, shares, subscribersGained, subscribersLost
+    Date range: From video publish date to current date.
     """
     try:
-        # Get the current date and a date 30 days ago
+        # Parse published_at_str (ISO 8601 format, e.g., '2023-10-26T14:00:00Z')
+        # Convert to 'YYYY-MM-DD' format
+        start_date_dt = datetime.fromisoformat(published_at_str.replace('Z', '+00:00'))
+        start_date = start_date_dt.strftime('%Y-%m-%d')
         end_date = datetime.now().strftime('%Y-%m-%d')
-        start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
-        
-        # Get view duration (average watch time)
-        duration_request = youtube_analytics.reports().query(
-            ids=f"channel==MINE",
+
+        # Ensure start_date is not after end_date (can happen for very new videos or clock sync issues)
+        if start_date > end_date:
+            start_date = end_date
+
+        report_request = youtube_analytics.reports().query(
+            ids="channel==MINE",
             startDate=start_date,
             endDate=end_date,
-            metrics="averageViewDuration",
+            metrics="averageViewDuration,shares,subscribersGained,subscribersLost",
             dimensions="video",
             filters=f"video=={video_id}"
         )
-        duration_response = duration_request.execute()
+        response = report_request.execute()
         
-        # Extract value
         avg_duration = None
+        shares = None
+        subscribers_gained = None
+        subscribers_lost = None
         
-        if 'rows' in duration_response and duration_response['rows']:
-            avg_duration = duration_response['rows'][0][1]
-        
+        if 'rows' in response and response['rows']:
+            row = response['rows'][0]
+            # Order of metrics in response matches the query: video_id, avgViewDuration, shares, subsGained, subsLost
+            # row[0] is video_id (dimension)
+            avg_duration = row[1] if len(row) > 1 else None
+            shares = row[2] if len(row) > 2 else None
+            subscribers_gained = row[3] if len(row) > 3 else None
+            subscribers_lost = row[4] if len(row) > 4 else None
+
         return {
-            'avg_view_duration': avg_duration
+            'avg_view_duration': avg_duration,
+            'shares': shares,
+            'subscribers_gained': subscribers_gained,
+            'subscribers_lost': subscribers_lost
         }
     except Exception as e:
-        # Return default values if analytics cannot be retrieved
-        print(f"Could not retrieve analytics for video {video_id}: {str(e)}")
-        # Return default values and continue with the script instead of failing
+        print(f"Could not retrieve extended analytics for video {video_id}: {str(e)}")
         return {
-            'avg_view_duration': None
+            'avg_view_duration': None,
+            'shares': None,
+            'subscribers_gained': None,
+            'subscribers_lost': None
         }
 
 
@@ -309,7 +326,7 @@ def extract_video_data(youtube, youtube_analytics):
             thumbnail_url = thumbnails.get('maxres', thumbnails.get('high', thumbnails.get('medium', thumbnails.get('default'))))['url']
             
             # Get analytics data
-            analytics = get_video_analytics(youtube_analytics, video_id)
+            analytics = get_video_analytics(youtube_analytics, video_id, snippet['publishedAt'])
             
             # Format video duration
             iso_duration = content_details.get('duration', 'PT0S')
@@ -363,7 +380,10 @@ def extract_video_data(youtube, youtube_analytics):
                 'engagement_rate': round(engagement_rate, 2),
                 'avg_view_duration_seconds': avg_view_duration_seconds,
                 'avg_view_duration': avg_view_duration_formatted,
-                'retention_rate': round(retention_rate, 2) if retention_rate is not None else None
+                'retention_rate': round(retention_rate, 2) if retention_rate is not None else None,
+                'shares': analytics.get('shares', 0) if analytics.get('shares') is not None else 0,
+                'subscribers_gained': analytics.get('subscribers_gained', 0) if analytics.get('subscribers_gained') is not None else 0,
+                'subscribers_lost': analytics.get('subscribers_lost', 0) if analytics.get('subscribers_lost') is not None else 0
             }
             
             video_data.append(video_entry)
