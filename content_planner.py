@@ -4,6 +4,7 @@ import hashlib
 import pandas as pd
 import google.generativeai as genai
 import argparse
+import time
 from sklearn.preprocessing import MinMaxScaler # For normalization
 
 # --- Configuration ---
@@ -166,14 +167,14 @@ def generate_content_plan_with_gemini(top_video_analyses, purple_cow_context, ge
         return []
 
     # Summarize the successful content
-    primary_topics = [analysis.get('primary_topic', 'N/A') for analysis in top_video_analyses if analysis]
-    categories = [analysis.get('content_category', 'N/A') for analysis in top_video_analyses if analysis]
+    primary_topics = [analysis.get('primary_topic', 'N/A') for analysis in top_video_analyses if analysis and isinstance(analysis, dict)]
+    categories = [analysis.get('content_category', 'N/A') for analysis in top_video_analyses if analysis and isinstance(analysis, dict)]
     # Filter out "Error in extraction" or similar default error messages
     successful_topics_summary = ", ".join(set(pt for pt in primary_topics if pt not in ["Error in extraction", "N/A"]))
     successful_categories_summary = ", ".join(set(cat for cat in categories if cat not in ["Unknown", "N/A"]))
 
     # Example titles from successful videos (if available and not error states)
-    example_titles = [analysis.get('original_title', '') for analysis in top_video_analyses if analysis and 'original_title' in analysis and analysis.get('primary_topic') != "Error in extraction"]
+    example_titles = [analysis.get('original_title', '') for analysis in top_video_analyses if analysis and isinstance(analysis, dict) and 'original_title' in analysis and analysis.get('primary_topic') != "Error in extraction"]
     example_titles_summary = ""
     if example_titles:
         example_titles_summary = f" achieving high engagement with content like \"{'; '.join(example_titles[:2])}\"."
@@ -228,8 +229,9 @@ The ideas should be distinct from one another and push creative boundaries while
         print(f"Error generating content plan with Gemini: {e}")
         return []
 
-def save_plan_to_markdown(content_plan, top_analyzed_videos_summary, filepath="content_plan.md"):
-    """Saves the generated content plan to a Markdown file."""
+def save_plan_to_markdown(content_plan, top_analyzed_videos_summary, channel_id, filepath_prefix="content_plan"):
+    """Saves the generated content plan to a Markdown file, named with channel_id."""
+    filepath = f"{filepath_prefix}_{channel_id}.md"
     try:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write("# YouTube Content Strategy: The Purple Cow Plan\n\n")
@@ -265,9 +267,10 @@ def main():
     """Main function to orchestrate the content planning process."""
     parser = argparse.ArgumentParser(description="Generate a YouTube content plan using AI and top video analysis.")
     parser.add_argument("--data_file", type=str, required=True, help="Path to the input JSON data file (e.g., youtube_video_data_CHANNELID.json).")
+    parser.add_argument("--channel_id", type=str, required=True, help="Channel ID, used for naming the output plan file.")
     args = parser.parse_args()
 
-    print(f"Starting content planner script with data file: {args.data_file}")
+    print(f"Starting content planner script for channel {args.channel_id} with data file: {args.data_file}")
 
     # Configure Gemini
     try:
@@ -300,12 +303,19 @@ def main():
     # 3. Extract topics and themes from top videos
     top_video_analyses = []
     print("\n--- Extracting Topics from Top Videos ---")
-    for video in top_videos:
+    for i, video in enumerate(top_videos):
         # Make sure description exists, default to empty if not
         description = video.get('description', '')
         analysis = extract_topics_themes_with_gemini(video['title'], description, gemini_model)
-        analysis['original_title'] = video['title'] # Keep original title for summary
+        if isinstance(analysis, dict): # Ensure analysis is a dict before adding more keys
+            analysis['original_title'] = video['title'] # Keep original title for summary
         top_video_analyses.append(analysis)
+
+        # Add delay only if it's not the last video, to avoid unnecessary wait at the end
+        if i < len(top_videos) - 1:
+            print(f"Processed video {i+1}/{len(top_videos)}. Adding 2 second delay before next API call...")
+            time.sleep(2)
+
 
     # 4. Generate content plan
     print("\n--- Generating Content Plan ---")
@@ -313,7 +323,7 @@ def main():
 
     # 5. Save plan to Markdown
     if content_ideas:
-        save_plan_to_markdown(content_ideas, top_video_analyses, filepath="content_plan.md")
+        save_plan_to_markdown(content_ideas, top_video_analyses, args.channel_id)
     else:
         print("No content ideas were generated, so no plan will be saved.")
 
