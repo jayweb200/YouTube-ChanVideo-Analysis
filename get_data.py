@@ -12,6 +12,7 @@ import pandas as pd
 import json
 import re
 import argparse
+import time
 from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
@@ -310,7 +311,7 @@ def extract_video_data(youtube, youtube_analytics, target_channel_id):
         # Extract and organize video data
         video_data = []
         
-        for video in videos:
+        for video_idx, video in enumerate(videos): # Added enumerate here
             video_id = video['id']
             snippet = video['snippet']
             statistics = video['statistics']
@@ -382,6 +383,11 @@ def extract_video_data(youtube, youtube_analytics, target_channel_id):
             }
             
             video_data.append(video_entry)
+
+            # Add delay here, after processing each video's analytics
+            if video_idx < len(videos) - 1: # Avoid sleep after the last video
+                print(f"Fetched analytics for video {video_idx+1}/{len(videos)}. Waiting 1 second...")
+                time.sleep(1)
         
         # Create DataFrame for CSV export
         df = pd.DataFrame(video_data)

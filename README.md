@@ -199,6 +199,9 @@ This script uses the "Purple Cow" marketing strategy (inspired by Seth Godin) al
 - **Dependencies**: This feature uses `scikit-learn` for data normalization (included in `requirements.txt`).
 - Caches topic analysis in `topic_cache/`.
 
+### API Politeness and Rate Limiting
+To ensure robust and polite interaction with external APIs (Google/YouTube and Gemini), small delays (typically 1-2 seconds) have been introduced between iterative API calls within the scripts (e.g., when fetching analytics for multiple videos or analyzing multiple titles). This may slightly increase processing time, especially for channels with many videos or when analyzing many items, but it is a crucial measure to help prevent rate limit issues and ensure smooth operation.
+
 ## Security Notes
 
 - **IMPORTANT**: Never commit your `credentials.json` or `token.json` files to public repositories

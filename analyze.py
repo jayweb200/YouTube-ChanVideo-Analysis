@@ -5,6 +5,7 @@ from io import BytesIO
 import pandas as pd
 import google.generativeai as genai
 import argparse
+import time
 
 from PIL import Image
 from urllib.request import urlopen
@@ -166,6 +167,11 @@ def main():
         }
         
         all_analyses += analysis + "\n\n"
+
+        # Add delay here, before processing the next video
+        if idx < len(top_videos) - 1: # Avoid sleep after the last video
+            print(f"Processed video {idx+1}/{len(top_videos)}. Waiting 2 seconds before next API call...")
+            time.sleep(2)
     
     # Generate overall patterns report
     print("Generating patterns report...")

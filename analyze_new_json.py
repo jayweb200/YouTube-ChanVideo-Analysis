@@ -4,6 +4,7 @@ import requests
 from io import BytesIO
 import pandas as pd
 import google.generativeai as genai
+import time
 
 from PIL import Image
 from urllib.request import urlopen
@@ -515,6 +516,10 @@ def main(args): # Add args
             
             # Save intermediate results after each video
             save_intermediate_results(data, video_analyses, top_videos, args.channel_id, "video_analysis") # Pass channel_id
+
+            if idx < len(top_videos) - 1: # Avoid sleep after the last video
+                print(f"Processed video {idx+1}/{len(top_videos)} in main() for JSON output. Waiting 2 seconds...")
+                time.sleep(2)
     
     # Generate overall patterns report
     print("Generating patterns report...")
@@ -552,6 +557,10 @@ def analyze_videos_only(args): # Add args
         
         # Save intermediate results after each video
         save_intermediate_results(data, video_analyses, top_videos, args.channel_id, "video_analysis") # Pass channel_id
+
+            if idx < len(top_videos) - 1: # Avoid sleep after the last video
+                print(f"Processed video {idx+1}/{len(top_videos)} in analyze_videos_only() for JSON output. Waiting 2 seconds...")
+                time.sleep(2)
     
     print("Video analysis complete! Run the script with --patterns flag to generate the patterns report.")
 
